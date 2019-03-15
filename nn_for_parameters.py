@@ -26,7 +26,7 @@ K.set_image_data_format('channels_last')
 K.set_learning_phase(1)
 
 
-# In[25]:
+# In[2]:
 
 
 def func2learn(x,y, p1, p2):
@@ -52,7 +52,7 @@ def create_traning_data(Ntest, npts=3, seed = 0, add_3rd_dim = False):
     return X,Y
 
 
-# In[31]:
+# In[3]:
 
 
 X, Y = create_traning_data(5,3)
@@ -67,14 +67,14 @@ print(X[0], X2[0])
 def create_model1(npts, nhnodes = 10):
     X_input = Input((npts, npts))
     X = Flatten()(X_input)
-    X = Dense(nhnodes, activation='tanh', name='Hidden', kernel_initializer = glorot_uniform(seed=0))(X)
-    X = Dense(2, activation='sigmoid', name='Final_1', kernel_initializer = glorot_uniform(seed=0))(X)
+    #X = Dense(nhnodes, activation='tanh', name='Hidden', kernel_initializer = glorot_uniform(seed=0))(X)
+    X = Dense(2, name='Final_1', kernel_initializer = glorot_uniform(seed=0))(X)
     # Create model
     model = Model(inputs = X_input, outputs = X, name='Model1')
     return model
 
 
-# In[9]:
+# In[5]:
 
 
 model = create_model1(3)
@@ -82,11 +82,11 @@ model.summary()
 model.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
 
-# In[10]:
+# In[6]:
 
 
 X_train, Y_train = create_traning_data(10000,3)
-model.fit(X_train, Y_train, epochs = 40, batch_size = None)
+model.fit(X_train, Y_train, epochs = 100, batch_size = None)
 
 
 # In[7]:
@@ -102,7 +102,7 @@ pred[0:10,:], Y[0:10,:]
 model.get_weights()
 
 
-# In[22]:
+# In[10]:
 
 
 def create_model2(npts, nhnodes = 6):
@@ -117,7 +117,7 @@ def create_model2(npts, nhnodes = 6):
     return model
 
 
-# In[23]:
+# In[11]:
 
 
 model2 = create_model2(3)
@@ -125,9 +125,16 @@ model2.summary()
 model2.compile(optimizer='adam', loss='mse', metrics=['accuracy'])
 
 
-# In[32]:
+# In[13]:
 
 
 X_train2, Y_train2 = create_traning_data(10000,3, add_3rd_dim=True)
-model.fit(X_train2, Y_train2, epochs = 10, batch_size = None)
+model2.fit(X_train2, Y_train2, epochs = 100, batch_size = None)
+
+
+# In[15]:
+
+
+pred = model2.predict(X_train2)
+pred[0:10,:], Y_train2[0:10,:]
 
